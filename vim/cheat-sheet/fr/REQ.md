@@ -12,11 +12,11 @@ sur les raccourcis claviers des fonctions Vim (vi, nvim)
 **Liste des exigences :**
 _selon la [méthode MoSCoW](https://fr.wikipedia.org/wiki/M%C3%A9thode_MoSCoW)_
 
-- req-vics-11: la fiche doit rappeler les raccourcis de fonctions
-- req-vics-12: la fiche doit être facile a utiliser et concise
-- req-vics-13: la fiche doit pouvoir être imprimable en petit format
-- req-vics-14: les raccourcis de fonctions doivent être groupés
+- req-vics-11: la fiche doit permetre de se rappeler des raccourcis des fonctions vim
+- req-vics-12: la fiche doit être concise et facile à utiliser
+- req-vics-13: les raccourcis de fonctions doivent être regroupés en catégories
 
+- req-vics-20: le support devrait être une fiche imprimée en petit format
 - req-vics-21: la fiche devrait contenir un lien vers les données sources
 - req-vics-22: les données sources devraient être modifiables
 - req-vics-23: les données sources devraient être versionnées
@@ -27,4 +27,8 @@ _selon la [méthode MoSCoW](https://fr.wikipedia.org/wiki/M%C3%A9thode_MoSCoW)_
 
 - req-vics-41: la fiche ne concerne que vim ou greffons
 - req-vicv-42: la fiche n'est pas un tutoriel mais un rappel des raccourcis de fonctions
+
+
+vics-13 
+liste des catégories
 
