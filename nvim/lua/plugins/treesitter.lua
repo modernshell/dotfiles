@@ -1,3 +1,8 @@
+-- https://github.com/modernshell/dotfiles/nvim
+-- modern.shell@gmail.com
+-- ~/.config/nvim/lua/plugins/treesitter.lua
+-- neovim 0.12
+
 -- Tree-sitter plugin
 vim.pack.add({
     {
