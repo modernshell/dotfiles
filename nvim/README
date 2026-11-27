@@ -1,1 +1,200 @@
 
+Neovim Dotfiles 🚀
+
+A modular Neovim configuration written in Lua, focused on fast navigation, modern autocompletion, and a smooth Git workflow.
+
+
+``
+~/.config/nvim/
+├── init.lua                 # Entry point: loads config + plugins
+└── lua/
+    ├── config/
+    │   ├── options.lua      # Editor settings (numbers, tabs, search, etc.)
+    │   └── keymaps.lua      # Global keybindings
+    └── plugins/
+        ├── fugitive.lua     # Git integration
+        ├── lspconfig.lua    # Language Server Protocol (autocomplete, diagnostics, etc.)
+        ├── lualine.lua      # Statusline
+        ├── neo-tree.lua     # File explorer sidebar
+        ├── oil.lua          # Edit the filesystem like a normal buffer
+        ├── telescope.lua    # Fuzzy finder
+        └── treesitter.lua   # Syntax highlighting and code parsing
+`
+
+🔌 Plugins & Their Key Functions
+
+fugitive.lua — Git Integration
+Run Git commands directly inside Neovim.
+
+| Shortcut    | Function                          |
+| :---------- | :-------------------------------- | 
+| :Git        | Git status window                 |
+| :Git blame  | Inline blame for the current file |
+| :Git commit | Commit changes                    |
+| :Git diff   | Show changes                      |
+| :Git log    | Browse commit history             |
+| :Git push   | Push to remote                    |
+| :Git pull   | Pull to remote                    |
+| <leader>gd  | Show diff for current file        |
+| <leader>gb  | Toggle blame line                 |
+
+\*Depending on your keymaps, add convenience bindings in keymaps.lua.
+
+lspconfig.lua — Language Server & Autocompletion
+Provides autocompletion, diagnostics, go-to-definition, references, hover docs, and refactoring.
+
+| Shortcut | Function |
+| :---     | :--- |
+| gd       | Go to definition |
+| gD       | Go to declaration |
+| gi | Go to implementation |
+| gr | List references |
+| K | Hover documentation |
+| [d / ]d | Previous / next diagnostic |
+| <leader>ca | Code action |
+| <leader>rn | Rename symbol |
+| <leader>f | Format buffer |
+| CTRL-SPACE | Trigger completion |
+| CR | Accept completion |
+
+Install servers with :Mason (if using mason.nvim).
+
+lualine.lua — Statusline
+A fast, customizable statusline written in Lua.
+
+Highlights by default:
+• Left: mode, Git branch, filename, diagnostics count
+• Right: filetype, encoding, cursor position, line/col
+
+Configure theme + sections in lualine.lua:
+`lua
+require('lualine').setup {
+  options = { theme = 'gruvbox', sectionseparators = '', componentseparators = '' }
+}
+`
+
+neo-tree.lua — File Explorer
+A clean, modern sidebar file explorer.
+
+| Shortcut | Function |
+| :--- | :--- |
+| <leader>e | Toggle file explorer |
+| a | Add file |
+| d | Delete file |
+| r | Rename file |
+| Enter | Open file |
+| s | Open in split |
+| v | Open in vsplit |
+| / | Fuzzy filter |
+| H / L | Toggle hidden files / last-opened |
+
+oil.lua — Filesystem in a Buffer
+Edit your filesystem like a normal buffer — rename files, move things around, all through text editing.
+
+| Shortcut | Function |
+| :--- | :--- |
+| - | Open parent directory |
+| Enter | Open file/directory under cursor |
+| - (in oil buffer) | Go up a directory |
+| Edit a filename | Rename file on save |
+| g. | Toggle hidden files |
+| g? | Show help |
+
+oil.lua pairs nicely with neo-tree.lua — use oil for quick renames and neo-tree for browsing.
+
+telescope.lua — Fuzzy Finder
+Search files, buffers, Git history, LSP symbols, and more — with live preview.
+
+| Shortcut | Function |
+| :--- | :--- |
+| <leader>ff | Find files |
+| <leader>fg | Live grep (search inside files) |
+| <leader>fb | Find open buffers |
+| <leader>fh | Help tags |
+| <leader>fr | Recent files |
+| <leader>fs | Document symbols |
+| <leader>fd | Diagnostics |
+| <leader>gc | Git commits |
+
+Inside Telescope: CTRL-n/CTRL-p to navigate, CTRL-t open in tab, CTRL-v open in vsplit.
+
+treesitter.lua — Syntax Highlighting & Parsing
+Provides accurate syntax highlighting, indentation, and code folding based on real parsers.
+
+Features enabled:
+• Incremental parsing for faster editing
+• Syntax highlighting with nvim-treesitter
+• Automatic indentation
+• Textobjects for selecting functions, blocks, etc.
+
+Install parsers with:
+`vim
+:TSInstall lua python javascript typescript go rust
+`
+
+| Shortcut | Function |
+| :--- | :--- |
+| :TSUpdate | Update all parsers |
+| :TSInstall <lang> | Install a parser |
+| af / if | Select a function / inner function |
+| ac / ic | Select a class / inner class |
+| aa / ia | Select a parameter / inner parameter |
+
+⌨️ Global Keymaps (from keymaps.lua)
+
+| Shortcut | Function |
+| :--- | :--- |
+| <leader>w | Save file |
+| <leader>q | Quit |
+| <leader>h | Clear search highlight |
+| <C-h/j/k/l> | Move between splits |
+| <leader>sv | Split vertically |
+| <leader>sh | Split horizontally |
+| <leader>tn | New tab |
+| <leader>tc | Close tab |
+| jk | Exit Insert mode |
+
+> Replace <leader> (usually Space) with your preferred key in init.lua or options.lua.
+
+🔧 Options Highlights (from options.lua)
+
+Common settings you'll find:
+• number = true — line numbers
+• relativenumber = true — relative line numbers
+• expandtab = true — spaces instead of tabs
+• tabstop = 2 — two-space indentation
+• shiftwidth = 2
+• smartindent = true
+• ignorecase = true + smartcase = true — smart case-insensitive search
+• termguicolors = true — true-color support
+• clipboard = "unnamedplus" — system clipboard integration
+• undofile = true — persistent undo
+
+🚀 Getting Started
+Backup your existing config (just in case):
+   `bash
+   mv ~/.config/nvim ~/.config/nvim.bak
+   `
+
+Clone this repository:
+   `bash
+   git clone <your-repo-url> ~/.config/nvim
+   `
+
+Launch Neovim — plugins will be installed automatically on first startup.
+
+Install language servers (via Mason or your package manager).
+
+Install Treesitter parsers you need:
+   `vim
+   :TSInstall <language>
+   `
+
+📝 Notes
+• Plugin manager: whichever is declared in init.lua (e.g. lazy.nvim / packer.nvim). Make sure to run :Lazy sync (or your manager's update command) after changing init.lua.
+• If a keymap conflicts with a plugin, check keymaps.lua and the plugin's own config — the plugin's local mappings generally take precedence inside its buffer.
+• Leader key is typically Space; adjust according to preference.
+
+📄 License
+
+Add your preferred license (MIT, Apache-2.0, etc.) in a LICENSE` file at the root of the repo.
