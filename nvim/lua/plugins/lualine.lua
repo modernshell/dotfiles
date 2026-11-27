@@ -1,4 +1,8 @@
+-- https://github.com/modernshell/dotfiles/nvim
+-- modern.shell@gmail.com
 -- ~/.config/nvim/lua/plugins/lualine.lua
+-- neovim 0.12
+
 vim.pack.add({
   "https://github.com/nvim-tree/nvim-web-devicons",
   "https://github.com/nvim-lualine/lualine.nvim",
