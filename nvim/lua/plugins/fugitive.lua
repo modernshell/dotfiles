@@ -1,3 +1,8 @@
+-- https://github.com/modernshell/dotfiles/nvim
+-- modern.shell@gmail.com
+-- ~/.config/nvim/lua/plugins/fugitive.lua
+-- neovim 0.12
+
 vim.pack.add({ "https://github.com/tpope/vim-fugitive" })
 
 vim.keymap.set("n", "<leader>gs", "<cmd>Git<cr>", { desc = "Git status" })
