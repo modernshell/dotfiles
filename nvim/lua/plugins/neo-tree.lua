@@ -1,3 +1,8 @@
+-- https://github.com/modernshell/dotfiles/nvim
+-- modern.shell@gmail.com
+-- ~/.config/nvim/lua/plugins/neo-tree.lua
+-- neovim 0.12
+
 vim.pack.add({
   'https://github.com/nvim-lua/plenary.nvim',
   'https://github.com/nvim-tree/nvim-web-devicons',
@@ -10,7 +15,7 @@ vim.pack.add({
 
 require('neo-tree').setup({
   close_if_last_window = true,
-  popup_border_style = 'rounded', -- Bordures arrondies pour les fenêtres flottantes (renommage, création...)
+  popup_border_style = 'rounded',
   enable_git_status = true,
   enable_diagnostics = true,
 
@@ -18,27 +23,16 @@ require('neo-tree').setup({
     position = 'left',
     width = 32,
     mappings = {
-      ['<space>'] = 'none', -- Libère la touche Espace si c'est votre <leader>
-      ['l'] = 'open',        -- Ouvre un fichier ou déplie un dossier avec 'l' (navigation style Vim)
-      ['h'] = 'close_node',  -- Replie un dossier avec 'h'
-      ['P'] = { 'toggle_preview', config = { use_float = true } }, -- Aperçu rapide d'un fichier sans l'ouvrir
+      ['<space>'] = 'none',
+      ['l'] = 'open', 
+      ['h'] = 'close_node',
+      ['P'] = { 'toggle_preview', config = { use_float = true } },
     },
   },
 
   filesystem = {
     filtered_items = {
-      visible = false,       -- Masque par défaut les fichiers cachés
-      hide_dotfiles = false, -- Affiche les fichiers commençant par un point (.env, .gitignore...)
-      hide_gitignored = true,
-      hide_by_name = {
-        'node_modules',
-        '.git',
-      },
-    },
-    follow_current_file = {
-      enabled = true,
-    },
-    use_libuv_file_watcher = true, -- Rafraîchit automatiquement l'arborescence si un fichier change sur le disque
+      visible = 
   },
 })
 
@@ -61,7 +55,7 @@ vim.pack.add({
 
 require('neo-tree').setup({
   close_if_last_window = true,
-  popup_border_style = 'rounded', -- Bordures arrondies pour les fenêtres flottantes (renommage, création...)
+  popup_border_style = 'rounded',
   enable_git_status = true,
   enable_diagnostics = true,
 
@@ -69,17 +63,17 @@ require('neo-tree').setup({
     position = 'left',
     width = 32,
     mappings = {
-      ['<space>'] = 'none', -- Libère la touche Espace si c'est votre <leader>
-      ['l'] = 'open',        -- Ouvre un fichier ou déplie un dossier avec 'l' (navigation style Vim)
-      ['h'] = 'close_node',  -- Replie un dossier avec 'h'
-      ['P'] = { 'toggle_preview', config = { use_float = true } }, -- Aperçu rapide d'un fichier sans l'ouvrir
+      ['<space>'] = 'none', 
+      ['l'] = 'open',
+      ['h'] = 'close_node',
+      ['P'] = { 'toggle_preview', config = { use_float = true } },
     },
   },
 
   filesystem = {
     filtered_items = {
-      visible = false,       -- Masque par défaut les fichiers cachés
-      hide_dotfiles = false, -- Affiche les fichiers commençant par un point (.env, .gitignore...)
+      visible = false, 
+      hide_dotfiles = false, 
       hide_gitignored = true,
       hide_by_name = {
         'node_modules',
@@ -89,7 +83,7 @@ require('neo-tree').setup({
     follow_current_file = {
       enabled = true,
     },
-    use_libuv_file_watcher = true, -- Rafraîchit automatiquement l'arborescence si un fichier change sur le disque
+    use_libuv_file_watcher = true,
   },
 })
 
