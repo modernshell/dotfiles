@@ -1,3 +1,8 @@
+-- https://github.com/modernshell/dotfiles/nvim
+-- modern.shell@gmail.com
+-- ~/.config/nvim/lua/plugins/telescope.lua
+-- neovim 0.12
+
 -- Run the fzf-native build after install/update.
 -- This autocmd must be registered BEFORE vim.pack.add().
 vim.api.nvim_create_autocmd('PackChanged', {
