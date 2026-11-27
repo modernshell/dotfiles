@@ -1,200 +1,422 @@
+# Neovim Dotfiles
 
-Neovim Dotfiles 🚀
+A modular, Lua-based Neovim configuration for terminal-based development, system administration and DevOps. It combines native Neovim features with a small selection of plugins for source code navigation, Git integration, file management and syntax highlighting.
 
-A modular Neovim configuration written in Lua, focused on fast navigation, modern autocompletion, and a smooth Git workflow.
+The configuration targets **Neovim 0.12+** and assumes the native `vim.pack` plugin manager, avoiding the need for a separate plugin manager.
 
+## Contents
 
-``
-~/.config/nvim/
-├── init.lua                 # Entry point: loads config + plugins
-└── lua/
-    ├── config/
-    │   ├── options.lua      # Editor settings (numbers, tabs, search, etc.)
-    │   └── keymaps.lua      # Global keybindings
-    └── plugins/
-        ├── fugitive.lua     # Git integration
-        ├── lspconfig.lua    # Language Server Protocol (autocomplete, diagnostics, etc.)
-        ├── lualine.lua      # Statusline
-        ├── neo-tree.lua     # File explorer sidebar
-        ├── oil.lua          # Edit the filesystem like a normal buffer
-        ├── telescope.lua    # Fuzzy finder
-        └── treesitter.lua   # Syntax highlighting and code parsing
-`
+- [Neovim Dotfiles](#neovim-dotfiles)
+  - [Contents](#contents)
+  - [Directory structure](#directory-structure)
+  - [Requirements](#requirements)
+    - [Debian / Ubuntu](#debian--ubuntu)
+    - [Alpine Linux](#alpine-linux)
+  - [Installation](#installation)
+  - [Plugin overview](#plugin-overview)
+  - [Plugin usage](#plugin-usage)
+    - [1. Fugitive — Git integration](#1-fugitive--git-integration)
+    - [2. LSPConfig — Language Server Protocol](#2-lspconfig--language-server-protocol)
+    - [3. Lualine — Status line](#3-lualine--status-line)
+    - [4. Neo-tree — Project explorer](#4-neo-tree--project-explorer)
+    - [5. Oil — Filesystem editing](#5-oil--filesystem-editing)
+    - [6. Telescope — Fuzzy finder](#6-telescope--fuzzy-finder)
+    - [7. Tree-sitter — Syntax-aware editing](#7-tree-sitter--syntax-aware-editing)
+  - [Suggested shortcuts](#suggested-shortcuts)
+  - [Essential Neovim commands](#essential-neovim-commands)
+  - [Maintenance and troubleshooting](#maintenance-and-troubleshooting)
+    - [Update plugins](#update-plugins)
+    - [Health checks](#health-checks)
+    - [Documentation](#documentation)
 
-🔌 Plugins & Their Key Functions
+## Directory structure
 
-fugitive.lua — Git Integration
-Run Git commands directly inside Neovim.
+```text
+./.config
+└── nvim
+    ├── init.lua
+    └── lua
+        ├── config
+        │   ├── keymaps.lua
+        │   └── options.lua
+        └── plugins
+            ├── fugitive.lua
+            ├── lspconfig.lua
+            ├── lualine.lua
+            ├── neo-tree.lua
+            ├── oil.lua
+            ├── telescope.lua
+            └── treesitter.lua
+```
 
-| Shortcut    | Function                          |
-| :---------- | :-------------------------------- | 
-| :Git        | Git status window                 |
-| :Git blame  | Inline blame for the current file |
-| :Git commit | Commit changes                    |
-| :Git diff   | Show changes                      |
-| :Git log    | Browse commit history             |
-| :Git push   | Push to remote                    |
-| :Git pull   | Pull to remote                    |
-| <leader>gd  | Show diff for current file        |
-| <leader>gb  | Toggle blame line                 |
+| File / directory | Purpose |
+| ------------------------ | ----------------------------------------------------------------------- |
+| `init.lua` | Main entry point; loads configuration modules and plugins. |
+| `lua/config/options.lua` | Editor settings: indentation, line numbers, search, splits and display. |
+| `lua/config/keymaps.lua` | Global keyboard shortcuts and leader key configuration. |
+| `lua/plugins/` | Individual plugin installation and configuration modules. |
 
-\*Depending on your keymaps, add convenience bindings in keymaps.lua.
+Each plugin is configured independently, making it easier to maintain, customize or disable individual features.
 
-lspconfig.lua — Language Server & Autocompletion
-Provides autocompletion, diagnostics, go-to-definition, references, hover docs, and refactoring.
+## Requirements
 
-| Shortcut | Function |
-| :---     | :--- |
-| gd       | Go to definition |
-| gD       | Go to declaration |
-| gi | Go to implementation |
-| gr | List references |
-| K | Hover documentation |
-| [d / ]d | Previous / next diagnostic |
-| <leader>ca | Code action |
-| <leader>rn | Rename symbol |
-| <leader>f | Format buffer |
-| CTRL-SPACE | Trigger completion |
-| CR | Accept completion |
+| Dependency | Purpose |
+| --- | --- |
+| [Neovim](https://neovim.io/) 0.12+ | Editor, Lua runtime and native plugin management. |
+| `git` | Plugin installation and version control. |
+| `ripgrep` (`rg`) | Text search through Telescope. |
+| `fd` or `fdfind` | Fast file discovery with Telescope (optional). |
+| C compiler, `curl`, `tar` | Tree-sitter parser installation. |
+| `tree-sitter` CLI | Parser tooling; see the selected Tree-sitter branch's requirements. |
+| Language servers | LSP features for the languages being edited. |
+| [Nerd Font](https://www.nerdfonts.com/) | Recommended for displaying file and status icons in the terminal. |
 
-Install servers with :Mason (if using mason.nvim).
+### Debian / Ubuntu
 
-lualine.lua — Statusline
-A fast, customizable statusline written in Lua.
+```sh
+sudo apt update
+sudo apt install git ripgrep fd-find build-essential curl tar
+```
 
-Highlights by default:
-• Left: mode, Git branch, filename, diagnostics count
-• Right: filetype, encoding, cursor position, line/col
+### Alpine Linux
 
-Configure theme + sections in lualine.lua:
-`lua
-require('lualine').setup {
-  options = { theme = 'gruvbox', sectionseparators = '', componentseparators = '' }
-}
-`
+```sh
+sudo apk add git ripgrep fd build-base curl tar
+```
 
-neo-tree.lua — File Explorer
-A clean, modern sidebar file explorer.
+Install Neovim 0.12 or later and a compatible Tree-sitter CLI separately if the distribution packages are too old. The Tree-sitter `main` branch currently requires CLI 0.26.1 or later. Install the font on the machine running the terminal, not necessarily on the remote Linux host.
 
-| Shortcut | Function |
-| :--- | :--- |
-| <leader>e | Toggle file explorer |
-| a | Add file |
-| d | Delete file |
-| r | Rename file |
-| Enter | Open file |
-| s | Open in split |
-| v | Open in vsplit |
-| / | Fuzzy filter |
-| H / L | Toggle hidden files / last-opened |
+Telescope and Neo-tree use `plenary.nvim`. Neo-tree also uses `nui.nvim`; icon providers such as `nvim-web-devicons` are optional depending on the configuration. These plugin dependencies must be declared in the Lua configuration as needed.
 
-oil.lua — Filesystem in a Buffer
-Edit your filesystem like a normal buffer — rename files, move things around, all through text editing.
+## Installation
 
-| Shortcut | Function |
-| :--- | :--- |
-| - | Open parent directory |
-| Enter | Open file/directory under cursor |
-| - (in oil buffer) | Go up a directory |
-| Edit a filename | Rename file on save |
-| g. | Toggle hidden files |
-| g? | Show help |
+From the root of this dotfiles repository, run the following commands. Back up an existing Neovim configuration before copying the new one.
 
-oil.lua pairs nicely with neo-tree.lua — use oil for quick renames and neo-tree for browsing.
+```sh
+mkdir -p "$HOME/.config"
 
-telescope.lua — Fuzzy Finder
-Search files, buffers, Git history, LSP symbols, and more — with live preview.
+if [ -e "$HOME/.config/nvim" ] || [ -L "$HOME/.config/nvim" ] 
+then
+    mv "$HOME/.config/nvim" "$HOME/.config/nvim.backup-$(date +%Y%m%d-%H%M%S)"
+fi
 
-| Shortcut | Function |
-| :--- | :--- |
-| <leader>ff | Find files |
-| <leader>fg | Live grep (search inside files) |
-| <leader>fb | Find open buffers |
-| <leader>fh | Help tags |
-| <leader>fr | Recent files |
-| <leader>fs | Document symbols |
-| <leader>fd | Diagnostics |
-| <leader>gc | Git commits |
+cp -R .config/nvim "$HOME/.config/"
 
-Inside Telescope: CTRL-n/CTRL-p to navigate, CTRL-t open in tab, CTRL-v open in vsplit.
+nvim
+```
 
-treesitter.lua — Syntax Highlighting & Parsing
-Provides accurate syntax highlighting, indentation, and code folding based on real parsers.
+On the first launch, `vim.pack.add()` calls in the loaded Lua modules install missing plugins. Internet access may be required. Install the relevant language servers and Tree-sitter parsers before using their features.
 
-Features enabled:
-• Incremental parsing for faster editing
-• Syntax highlighting with nvim-treesitter
-• Automatic indentation
-• Textobjects for selecting functions, blocks, etc.
+Check the installation from inside Neovim:
 
-Install parsers with:
-`vim
-:TSInstall lua python javascript typescript go rust
-`
+```vim
+:checkhealth
+```
 
-| Shortcut | Function |
-| :--- | :--- |
-| :TSUpdate | Update all parsers |
-| :TSInstall <lang> | Install a parser |
-| af / if | Select a function / inner function |
-| ac / ic | Select a class / inner class |
-| aa / ia | Select a parameter / inner parameter |
+> The paths above assume the standard Linux XDG configuration directory (`~/.config`).
 
-⌨️ Global Keymaps (from keymaps.lua)
+## Plugin overview
 
-| Shortcut | Function |
-| :--- | :--- |
-| <leader>w | Save file |
-| <leader>q | Quit |
-| <leader>h | Clear search highlight |
-| <C-h/j/k/l> | Move between splits |
-| <leader>sv | Split vertically |
-| <leader>sh | Split horizontally |
-| <leader>tn | New tab |
-| <leader>tc | Close tab |
-| jk | Exit Insert mode |
+| Plugin | Configuration | Main purpose |
+| --- | --- | --- |
+| [vim-fugitive](https://github.com/tpope/vim-fugitive) | `fugitive.lua` | Git integration |
+| [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) | `lspconfig.lua` | Language server configurations |
+| [lualine.nvim](https://github.com/nvim-lualine/lualine.nvim) | `lualine.lua` | Informative status line |
+| [neo-tree.nvim](https://github.com/nvim-neo-tree/neo-tree.nvim) | `neo-tree.lua` | Tree-based project explorer |
+| [oil.nvim](https://github.com/stevearc/oil.nvim) | `oil.lua` | Buffer-based file management |
+| [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) | `telescope.lua` | Interactive fuzzy search |
+| [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) | `treesitter.lua` | Syntax-aware editing |
 
-> Replace <leader> (usually Space) with your preferred key in init.lua or options.lua.
+## Plugin usage
 
-🔧 Options Highlights (from options.lua)
+The following reference describes upstream commands and commonly available default mappings. Buffer-local shortcuts apply only inside the relevant plugin window. Local Lua settings may override these defaults.
 
-Common settings you'll find:
-• number = true — line numbers
-• relativenumber = true — relative line numbers
-• expandtab = true — spaces instead of tabs
-• tabstop = 2 — two-space indentation
-• shiftwidth = 2
-• smartindent = true
-• ignorecase = true + smartcase = true — smart case-insensitive search
-• termguicolors = true — true-color support
-• clipboard = "unnamedplus" — system clipboard integration
-• undofile = true — persistent undo
+**Notation:** `<CR>` = Enter, `<Esc>` = Escape, `<C-x>` = Ctrl+x, `<Tab>` = Tab, `<leader>` = configured leader key. Unless otherwise noted, mappings are used in Normal mode.
 
-🚀 Getting Started
-Backup your existing config (just in case):
-   `bash
-   mv ~/.config/nvim ~/.config/nvim.bak
-   `
+### 1. Fugitive — Git integration
 
-Clone this repository:
-   `bash
-   git clone <your-repo-url> ~/.config/nvim
-   `
+Work with Git repositories without leaving Neovim: inspect changes, stage files, commit, review history and compare revisions.
 
-Launch Neovim — plugins will be installed automatically on first startup.
+| Command | Action |
+| --- | --- |
+| `:Git` | Open the repository status window. |
+| `:Git diff` | View unstaged changes. |
+| `:Git log` | Browse commit history. |
+| `:Git blame` | Show commit attribution for the current file. |
+| `:Gdiffsplit` | Compare the current file in a split. |
+| `:Git commit` | Commit staged changes. |
+| `:Git pull` / `:Git push` | Synchronize with a remote repository. |
 
-Install language servers (via Mason or your package manager).
+**Inside the Git status window:**
 
-Install Treesitter parsers you need:
-   `vim
-   :TSInstall <language>
-   `
+| Key | Action |
+| --- | --- |
+| `<CR>` | Open the selected item. |
+| `s` / `u` | Stage / unstage the selected file or hunk. |
+| `=` | Toggle the inline diff. |
+| `cc` | Start a commit. |
+| `g?` | Display mapping help. |
 
-📝 Notes
-• Plugin manager: whichever is declared in init.lua (e.g. lazy.nvim / packer.nvim). Make sure to run :Lazy sync (or your manager's update command) after changing init.lua.
-• If a keymap conflicts with a plugin, check keymaps.lua and the plugin's own config — the plugin's local mappings generally take precedence inside its buffer.
-• Leader key is typically Space; adjust according to preference.
+Typical workflow: `:Git` → select changed files → `s` → `cc` → write the commit message → `:wq` → `:Git push` when ready.
 
-📄 License
+Help: `:help fugitive`
 
-Add your preferred license (MIT, Apache-2.0, etc.) in a LICENSE` file at the root of the repo.
+### 2. LSPConfig — Language Server Protocol
+
+Provides ready-made language server configurations for Neovim's native LSP client. Features can include diagnostics, symbol navigation, documentation, refactoring, completion and formatting, depending on the language server.
+
+Language servers are separate executables and are not installed automatically by `nvim-lspconfig`.
+
+| Language | Example server / configuration name |
+| --- | --- |
+| Python | Pyright (`pyright`), Ruff (`ruff`) |
+| Lua | Lua Language Server (`lua_ls`) |
+| Bash | Bash Language Server (`bashls`) |
+| JSON | VS Code JSON Language Server (`jsonls`) |
+| YAML | YAML Language Server (`yamlls`) |
+
+Install the servers required by `lspconfig.lua`, ensure their executables are on `PATH`, and enable the relevant configuration using the modern Neovim API:
+
+```lua
+-- Example: requires Pyright to be installed separately.
+vim.lsp.enable('pyright')
+```
+
+**Common native LSP mappings:**
+
+| Key | Action |
+| --- | --- |
+| `K` | Display documentation for the symbol under the cursor. |
+| `grr` | Find references. |
+| `gri` | Find implementations. |
+| `grn` | Rename a symbol. |
+| `gra` | Show code actions (Normal or Visual mode). |
+| `grt` | Go to type definition. |
+| `[d` / `]d` | Previous / next diagnostic. |
+| `<C-x><C-o>` | Request omni-completion in Insert mode, when configured. |
+
+Other useful actions, available when supported by the attached server:
+
+| Command | Action |
+| --- | --- |
+| `:lua vim.lsp.buf.definition()` | Go to the definition. |
+| `:lua vim.lsp.buf.format()` | Format the buffer. |
+| `:lua vim.diagnostic.open_float()` | Display diagnostic details. |
+| `:checkhealth vim.lsp` | Inspect LSP configuration and clients. |
+
+Help: `:help lsp`, `:help lsp-defaults`, `:help lspconfig-all`
+
+### 3. Lualine — Status line
+
+Displays contextual information at the bottom of the editor, such as the current mode, Git branch, file name, diagnostic counts, file type and cursor position.
+
+A typical status line contains:
+
+```text
+NORMAL | main | init.lua [+] | lua | utf-8 | 42:8
+```
+
+Lualine is primarily informational and has no essential interactive shortcuts. Themes, sections, separators and displayed components are configured in `lualine.lua`.
+
+Help: `:help lualine.txt`
+
+### 4. Neo-tree — Project explorer
+
+Provides a sidebar for browsing directories, open buffers and Git changes. Useful for understanding the structure of a project and performing file operations.
+
+| Command | Action |
+| --- | --- |
+| `:Neotree toggle` | Show or hide the explorer. |
+| `:Neotree reveal` | Locate the current file in the tree. |
+| `:Neotree buffers` | Display open buffers. |
+| `:Neotree git_status` | Display Git changes. |
+
+**Inside the explorer:**
+
+| Key | Action |
+| --- | --- |
+| `j` / `k` | Move down / up. |
+| `<CR>` | Open the selected file or directory. |
+| `a` | Create an item. |
+| `r` | Rename an item. |
+| `d` | Delete an item. |
+| `y` / `x` / `p` | Copy / cut / paste an item. |
+| `s` / `S` | Open in a vertical / horizontal split. |
+| `?` | Show mappings. |
+
+Help: `:help neo-tree`
+
+### 5. Oil — Filesystem editing
+
+Displays a directory as an editable Neovim buffer. Create, rename, move, copy and delete filesystem entries using familiar editing operations.
+
+| Command | Action |
+| --- | --- |
+| `:Oil` | Open the current file's directory. |
+| `:Oil .` | Open the working directory. |
+| `:Oil --float` | Open the directory in a floating window. |
+
+**Inside an Oil buffer:**
+
+| Key / command | Action |
+| --- | --- |
+| `<CR>` | Open a file or enter a directory. |
+| `-` | Navigate to the parent directory. |
+| `g.` | Toggle hidden files. |
+| `g?` | Show available mappings. |
+| `dd` | Remove an entry from the buffer. |
+| `:w` | Apply pending filesystem changes. |
+
+To rename a file, edit its name directly and save the buffer. To create a file, insert a new line containing its name; append `/` for a directory. Review the proposed operations before confirming, especially deletions and moves.
+
+Help: `:help oil`, `:help oil-actions`
+
+### 6. Telescope — Fuzzy finder
+
+Search for files, text, buffers, help topics and Git information using interactive pickers with previews.
+
+| Command | Action |
+| --- | --- |
+| `:Telescope find_files` | Find files by name. |
+| `:Telescope live_grep` | Search text across the working directory. |
+| `:Telescope grep_string` | Search for the word under the cursor. |
+| `:Telescope buffers` | Switch between open buffers. |
+| `:Telescope oldfiles` | Browse recently opened files. |
+| `:Telescope git_files` | Find Git-tracked files. |
+| `:Telescope help_tags` | Search Neovim documentation. |
+| `:Telescope keymaps` | Search configured key mappings. |
+| `:Telescope diagnostics` | Browse diagnostics. |
+
+**Inside a picker:**
+
+| Key | Action |
+| --- | --- |
+| `<C-n>` / `<C-p>` | Next / previous result. |
+| `<CR>` | Open the selected result. |
+| `<C-x>` / `<C-v>` | Open in a horizontal / vertical split. |
+| `<C-t>` | Open in a new tab. |
+| `<C-u>` / `<C-d>` | Scroll the preview up / down. |
+| `<Tab>` | Toggle selection and move to the next result. |
+| `<C-q>` | Send matching results to the quickfix list. |
+| `<C-c>` | Close the picker in Insert mode. |
+| `<Esc>` | Close the picker in Normal mode. |
+| `?` | Show picker mappings in Normal mode. |
+
+Run Neovim from the project root for convenient project-wide searching. `live_grep` requires `ripgrep`.
+
+Help: `:help telescope.nvim`, `:help telescope.builtin`
+
+### 7. Tree-sitter — Syntax-aware editing
+
+Installs language parsers and queries used by Neovim to understand code structure. This supports syntax highlighting, language injections, folding and, where configured, experimental indentation.
+
+Tree-sitter performs syntactic analysis locally, whereas LSP provides language-server-powered semantic features such as references and diagnostics. They complement each other.
+
+| Command | Action |
+| --- | --- |
+| `:TSInstall python` | Install the Python parser and queries. |
+| `:TSInstall bash lua json yaml` | Install several parsers. |
+| `:TSUpdate` | Update installed parsers. |
+| `:TSUninstall python` | Remove the Python parser. |
+| `:Inspect` | Inspect highlighting and semantic information under the cursor. |
+| `:InspectTree` | Display the syntax tree of the current buffer. |
+
+For the rewritten `main` branch, installing a parser alone does not enable highlighting. The configuration should activate it for the relevant file types using `vim.treesitter.start()`. Folding and indentation require additional configuration.
+
+There are no universal Tree-sitter-specific editing shortcuts in this setup. If Tree-sitter folding is configured, the standard Neovim fold mappings `za`, `zo` and `zc` toggle, open and close folds respectively.
+
+Help: `:help treesitter`, `:help nvim-treesitter-commands`
+
+## Suggested shortcuts
+
+The following global Normal-mode mappings are a proposed convention, **not verified mappings from the repository**. Add or adapt them in `keymaps.lua` or the relevant plugin modules. Set the leader key before defining mappings; for example, `vim.g.mapleader = ' '` uses Space.
+
+| Shortcut | Action / command |
+| --- | --- |
+| `<leader>ff` | Find files — `:Telescope find_files` |
+| `<leader>fg` | Search text — `:Telescope live_grep` |
+| `<leader>fb` | Find buffers — `:Telescope buffers` |
+| `<leader>fh` | Find help — `:Telescope help_tags` |
+| `<leader>fr` | Recent files — `:Telescope oldfiles` |
+| `<leader>e`  | Toggle Neo-tree — `:Neotree toggle` |
+| `<leader>o`  | Open Oil — `:Oil` |
+| `<leader>gs` | Git status — `:Git` |
+| `<leader>gb` | Git blame — `:Git blame` |
+| `<leader>gd` | Git diff split — `:Gdiffsplit` |
+| `gd`         | Go to definition — `vim.lsp.buf.definition()` |
+| `<leader>lf` | Format — `vim.lsp.buf.format()` |
+| `<leader>ld` | Diagnostic details — `vim.diagnostic.open_float()` |
+
+Example mapping definitions:
+
+```lua
+vim.g.mapleader = ' '
+
+vim.keymap.set('n', '<leader>ff', '<cmd>Telescope find_files<cr>',
+    { desc = 'Find files' })
+vim.keymap.set('n', '<leader>fg', '<cmd>Telescope live_grep<cr>',
+    { desc = 'Search project text' })
+vim.keymap.set('n', '<leader>e', '<cmd>Neotree toggle<cr>',
+    { desc = 'Toggle file explorer' })
+vim.keymap.set('n', '<leader>o', '<cmd>Oil<cr>',
+    { desc = 'Open directory' })
+vim.keymap.set('n', '<leader>gs', '<cmd>Git<cr>',
+    { desc = 'Git status' })
+```
+
+To inspect active mappings, use `:map`, `:nmap`, `:verbose nmap <leader>ff` or `:Telescope keymaps`.
+
+## Essential Neovim commands
+
+| Command / key | Action |
+| --- | --- |
+| `:w` / `:q` / `:wq` | Save / quit / save and quit. |
+| `:e <file>` | Open a file. |
+| `:ls` | List buffers. |
+| `:bn` / `:bp` | Next / previous buffer. |
+| `:bd` | Delete the current buffer from the buffer list. |
+| `:split` / `:vsplit` | Horizontal / vertical split. |
+| `<C-w>h/j/k/l` | Move between windows. |
+| `:terminal` | Open an integrated terminal. |
+| `<C-\\><C-n>` | Leave Terminal mode for Normal mode. |
+| `:copen` | Open the quickfix list. |
+| `:cnext` / `:cprev` | Next / previous quickfix entry. |
+
+## Maintenance and troubleshooting
+
+### Update plugins
+
+```vim
+:lua vim.pack.update()
+```
+
+Review the proposed changes and confirm the update. After updating Tree-sitter, synchronize the parsers:
+
+```vim
+:TSUpdate
+```
+
+Restart Neovim and check for errors. For reproducible installations, consider committing the generated `nvim-pack-lock.json` lockfile alongside the configuration when using `vim.pack`.
+
+### Health checks
+
+| Command | Purpose |
+| --- | --- |
+| `:checkhealth` | Overall installation health. |
+| `:checkhealth vim.lsp` | Language server availability and status. |
+| `:checkhealth nvim-treesitter` | Parser and dependency checks. |
+| `:checkhealth telescope` | Telescope dependencies. |
+| `:messages` | Startup messages, warnings and errors. |
+| `:verbose nmap <leader>ff` | Identify the source of a mapping. |
+| `:lua print(vim.fn.stdpath('config'))` | Locate the active configuration. |
+
+If icons render incorrectly, select a Nerd Font in the terminal settings. If LSP does not attach, check server installation, file type, project root markers and the enabled configuration. If text search fails, check that `rg` is on `PATH`.
+
+### Documentation
+
+- [Neovim user manual](https://neovim.io/doc/user/)
+- [Native package management (`vim.pack`)](https://neovim.io/doc/user/pack/)
+- [Neovim LSP documentation](https://neovim.io/doc/user/lsp/)
+- [Tree-sitter documentation](https://github.com/nvim-treesitter/nvim-treesitter/blob/main/README.md)
+
+See the upstream repositories linked in the plugin overview for additional configuration options and version-specific changes.
