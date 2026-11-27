@@ -1,3 +1,8 @@
+-- https://github.com/modernshell/dotfiles/nvim
+-- modern.shell@gmail.com
+-- ~/.config/nvim/lua/plugins/lspconfig.lua
+-- neovim 0.12
+
 vim.pack.add({
   { src = "https://github.com/neovim/nvim-lspconfig" },
   -- optional: manage server binaries
