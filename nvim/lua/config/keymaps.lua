@@ -1,6 +1,6 @@
 -- https://github.com/modernshell/dotfiles/nvim
 -- modern.shell@gmail.com
--- ~/.config/nvim/config/keymaps.lua
+-- ~/.config/nvim/lua/config/keymaps.lua
 -- neovim 0.12
 
 -- main sortcuts
