@@ -1,4 +1,8 @@
--- init.lua
+
+-- https://github.com/modernshell/dotfiles/nvim
+-- ~/.config/nvim/init.lua
+-- neovim 0.12
+
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
