@@ -1,6 +1,6 @@
 -- https://github.com/modernshell/dotfiles/nvim
 -- modern.shell@gmail.com
--- ~/.config/nvim/config/options.lua
+-- ~/.config/nvim/lua/config/options.lua
 -- neovim 0.12
 
 local o = vim.opt
