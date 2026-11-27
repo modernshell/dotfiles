@@ -1,3 +1,7 @@
+-- https://github.com/modernshell/dotfiles/nvim
+-- ~/.config/nvim/config/options.lua
+-- neovim 0.12
+
 local o = vim.opt
 o.number = true
 o.relativenumber = false
