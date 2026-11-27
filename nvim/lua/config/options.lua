@@ -1,4 +1,5 @@
 -- https://github.com/modernshell/dotfiles/nvim
+-- modern.shell@gmail.com
 -- ~/.config/nvim/config/options.lua
 -- neovim 0.12
 
